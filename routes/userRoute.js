@@ -1,7 +1,8 @@
 const express=require('express')
 const userRoute=express();
 const session =require('express-session');
-
+const nocache =require('nocache')
+userRoute.use(nocache());
 //session
 const config = require('../config/config');
 userRoute.use(session({secret:config.sessionSecret}));
@@ -19,6 +20,7 @@ userRoute.use(logger('dev'));
 //view engine
 userRoute.set('view engine','ejs')
 userRoute.set('views','./views/user')
+
 
 
 

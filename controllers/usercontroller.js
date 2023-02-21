@@ -36,7 +36,7 @@ const userHome = async(req,res)=>{
         const data =await product.find();
         console.log(data);
         const cata=await category.find();
-        const use =await user.find({_id:id});
+        const use =await user.findOne({_id:id});
         
         res.render('homepage',{data,cata,use,users});
 
@@ -128,31 +128,28 @@ const userLogout =async(req,res)=>{
 
 }
 const productView = async(req,res)=>{
-    try {
-        
-       
-        if(req.session.user_id){
-            const id=req.session.user_id
-            const users=true;
-            const data =await product.find();
-            console.log(data);
-            const cata=await category.find();
-            const use =await user.find({_id:id});
-            
-            res.render('productview',{data,cata,use,users});
     
+    try {
+        if(req.session.user_id){
+            const id=req.session.user_id;
+        const singleproduct= await product.find({_id:req.params.id});
+        const users=true;
+        const use =await user.findOne({_id:id});
+        res.render('productview',{singleproduct,users,use})
+
         }else{
-            console.log("iam guest");
-            const data=await product.find();
-            const cat =await category.find();
-            const users=false;
-            res.render('productview',{data,cat,users})
+            const singleproduct= await product.find({_id:req.params.id});
+        const users=false;
+        
+        res.render('productview',{singleproduct,users})
 
         }
         
     } catch (error) {
         console.log(error.message);
     }
+        
+    
 }
 module.exports = {
     guest,
